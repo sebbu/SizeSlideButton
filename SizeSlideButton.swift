@@ -62,9 +62,9 @@ public enum SizeSlideButtonState {
     case expanded
 }
 
-public extension UIControlEvents{ //Add extra control event
+public extension UIControl.Event{ //Add extra control event
     /* Note that Apple only reserves 4 values: 0x01000000, 0x02000000, 0x04000000 and 0x08000000 for use by UIControlEventApplicationReserved */
-    static public let touchDragFinished = UIControlEvents(rawValue: 0x01000000)
+    static let touchDragFinished = UIControl.Event(rawValue: 0x01000000)
 }
 
 @IBDesignable open class SizeSlideButton: UIControl {
@@ -73,7 +73,7 @@ public extension UIControlEvents{ //Add extra control event
         case linear
     }
     
-    open let shapeMask = CAShapeLayer()
+    public let shapeMask = CAShapeLayer()
     open var handle = SizeSlideHandle()
     open var animationType: AnimationType = .spring
     open fileprivate(set) var currentState: SizeSlideButtonState = .condensed //default state
@@ -144,20 +144,20 @@ public extension UIControlEvents{ //Add extra control event
     /* Layer Masks - must share same points for animations */
     var expandedLayerMaskPath: CGPath{
         let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x:  leftSideRadius, y: frame.height/2), radius: leftSideRadius, startAngle: CGFloat(M_PI), endAngle: CGFloat(1.5*M_PI), clockwise: true)
-        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(1.5*M_PI), endAngle: 0, clockwise: true)
-        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
-        path.addArc(withCenter: CGPoint(x: leftSideRadius, y: frame.height/2), radius: leftSideRadius, startAngle: CGFloat(M_PI_2), endAngle: CGFloat(M_PI), clockwise: true)
+        path.addArc(withCenter: CGPoint(x:  leftSideRadius, y: frame.height/2), radius: leftSideRadius, startAngle: CGFloat(Double.pi), endAngle: CGFloat(1.5*Double.pi), clockwise: true)
+        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(1.5*Double.pi), endAngle: 0, clockwise: true)
+        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: 0, endAngle: CGFloat(Double.pi / 2), clockwise: true)
+        path.addArc(withCenter: CGPoint(x: leftSideRadius, y: frame.height/2), radius: leftSideRadius, startAngle: CGFloat(Double.pi / 2), endAngle: CGFloat(Double.pi), clockwise: true)
         path.close()
         return path.cgPath
     }
     
     var condensedLayerMaskPath: CGPath{
         let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x:  frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(M_PI), endAngle: CGFloat(1.5*M_PI), clockwise: true)
-        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(1.5*M_PI), endAngle: 0, clockwise: true)
-        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
-        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(M_PI_2), endAngle: CGFloat(M_PI), clockwise: true)
+        path.addArc(withCenter: CGPoint(x:  frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(Double.pi), endAngle: CGFloat(1.5*Double.pi), clockwise: true)
+        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(1.5*Double.pi), endAngle: 0, clockwise: true)
+        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: 0, endAngle: CGFloat(Double.pi / 2), clockwise: true)
+        path.addArc(withCenter: CGPoint(x: frame.width - rightSideRadius, y: frame.height - rightSideRadius), radius: rightSideRadius, startAngle: CGFloat(Double.pi / 2), endAngle: CGFloat(Double.pi), clockwise: true)
         path.close()
         return path.cgPath
     }
@@ -218,7 +218,7 @@ public extension UIControlEvents{ //Add extra control event
     }
     
     //MARK: Gesture/Touch Controls
-    func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer){
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer){
         
         if currentState == .condensed{
             self.sendActions(for: .touchDown)
@@ -265,7 +265,7 @@ public extension UIControlEvents{ //Add extra control event
     
     func springAnimateHandle(to position: CGPoint, with damping: CGFloat = 20) { }
     
-    func handleTapGesture(_ gesture: UITapGestureRecognizer){
+    @objc func handleTapGesture(_ gesture: UITapGestureRecognizer){
         if gesture.state == .began{
             self.sendActions(for: .touchDown)
         }
@@ -333,7 +333,7 @@ public extension UIControlEvents{ //Add extra control event
         revealAnimation.toValue = newMaskPath
         revealAnimation.duration = revealAnimation.settlingDuration
         revealAnimation.isRemovedOnCompletion = false
-        revealAnimation.fillMode = kCAFillModeForwards
+        revealAnimation.fillMode = CAMediaTimingFillMode.forwards
         
         shapeMask.path = newMaskPath //set final state
         

@@ -1,15 +1,12 @@
 # SizeSlideButton
-![Supported Version](https://img.shields.io/badge/Swift-3-yellow.svg)
+![Supported Version](https://img.shields.io/badge/Swift-5-yellow.svg)
 ![Platform](https://img.shields.io/badge/platform-iOS-lightgray.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![CocoaPods](https://img.shields.io/badge/CocoaPods-1.5-green.svg)
 
 A fun Swift UIControl for picking a size.
 ![Demo Animation](../assets/demo.gif?raw=true)
 
 ## Installation
-### Cocoapods
-Add `pod 'SizeSlideButton'` to your Podfile.
 ### Manually
 Add the `SizeSlideButton.swift` class to your project.
 

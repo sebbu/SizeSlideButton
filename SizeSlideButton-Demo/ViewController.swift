@@ -37,13 +37,13 @@ class ViewController: UIViewController {
         
         /* A button to test for click-through on the fancyControl as well as appear when tapped */
         debugBtn = UIButton(frame: CGRect(x: 165, y: 75, width: 100, height: 22))
-        debugBtn.setTitle("Tapped", for: UIControlState())
+        debugBtn.setTitle("Tapped", for: UIControl.State())
         debugBtn.alpha = 0
         debugBtn.addTarget(self, action: #selector(test), for: .touchUpInside) //For testing purposes
         self.view.insertSubview(debugBtn, belowSubview: fancyControl)
     }
     
-    func newSizeSelected(_ sender: SizeSlideButton){
+    @objc func newSizeSelected(_ sender: SizeSlideButton){
         //Do something once a size is selected and the control let go
         let multipler = sender.handle.height
         
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         print("Multiplier: \(multipler)")
     }
     
-    func sizeSliderTapped(_ sender: SizeSlideButton){
+    @objc func sizeSliderTapped(_ sender: SizeSlideButton){
         //Do something when the button is tapped
         
         UIView.animate(withDuration: 0.3, animations: { 
@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         }) 
     }
     
-    func test(){
+    @objc func test(){
         print("Clickarooo!")
     }
 }
